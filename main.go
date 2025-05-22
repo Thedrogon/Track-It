@@ -21,8 +21,13 @@ func main() {
 	// Create router
 	router := mux.NewRouter()
 
+	// Serve static files
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
 	// Define routes
-	router.HandleFunc("/", handler.Homepage).Methods("GET")
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "static/index.html")
+	}).Methods("GET")
 	router.HandleFunc("/problems", handler.CreateProblem).Methods("POST")
 	router.HandleFunc("/problems", handler.GetAllProblems).Methods("GET")
 	router.HandleFunc("/problems/{id}", handler.GetProblem).Methods("GET")
