@@ -15,7 +15,7 @@ type ProblemRepository struct {
 
 func NewProblemRepository() *ProblemRepository {
 	return &ProblemRepository{
-		db: database.DB,
+		db: db.DB,
 	}
 }
 

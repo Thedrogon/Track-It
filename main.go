@@ -4,15 +4,15 @@ import (
 	"log"
 	"net/http"
 
-	handlers "github.com/Thedrogon/Track-It/Internals/Handlers"
+	"github.com/Thedrogon/Track-It/Internals/db"
+	"github.com/Thedrogon/Track-It/Internals/handlers"
 	"github.com/Thedrogon/Track-It/Internals/repository"
 	"github.com/gorilla/mux"
-	"github.com/Thedrogon/Track-It/Internals/db"
 )
 
 func main() {
 	// Initialize database
-	database.InitDB()
+	db.InitDB()
 
 	// Initialize repository and handler
 	repo := repository.NewProblemRepository()
