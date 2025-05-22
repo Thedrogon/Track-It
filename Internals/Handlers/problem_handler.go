@@ -1,11 +1,11 @@
-package handlers
+package Handlers
 
 import (
 	"encoding/json"
 	"net/http"
 	"strconv"
 
-	 "github.com/Thedrogon/Track-It/Internals/models"
+	"github.com/Thedrogon/Track-It/Internals/models"
 	"github.com/Thedrogon/Track-It/Internals/repository"
 	"github.com/gorilla/mux"
 )
@@ -16,6 +16,10 @@ type ProblemHandler struct {
 
 func NewProblemHandler(repo *repository.ProblemRepository) *ProblemHandler {
 	return &ProblemHandler{repo: repo}
+}
+
+func (h *ProblemHandler) Homepage(w http.ResponseWriter , r *http.Request){
+	json.NewEncoder(w).Encode("Hello fellas")
 }
 
 func (h *ProblemHandler) CreateProblem(w http.ResponseWriter, r *http.Request) {

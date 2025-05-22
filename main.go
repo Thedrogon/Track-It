@@ -16,12 +16,13 @@ func main() {
 
 	// Initialize repository and handler
 	repo := repository.NewProblemRepository()
-	handler := handlers.NewProblemHandler(repo)
+	handler := Handlers.NewProblemHandler(repo)
 
 	// Create router
 	router := mux.NewRouter()
 
 	// Define routes
+	router.HandleFunc("/", handler.Homepage).Methods("GET")
 	router.HandleFunc("/problems", handler.CreateProblem).Methods("POST")
 	router.HandleFunc("/problems", handler.GetAllProblems).Methods("GET")
 	router.HandleFunc("/problems/{id}", handler.GetProblem).Methods("GET")
