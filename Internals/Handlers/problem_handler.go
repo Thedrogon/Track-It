@@ -1,9 +1,10 @@
-package Handlers
+package handlers
 
 import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/Thedrogon/Track-It/Internals/models"
 	"github.com/Thedrogon/Track-It/Internals/repository"
@@ -102,4 +103,28 @@ func (h *ProblemHandler) DeleteProblem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h *ProblemHandler) GetProblemsByTags(w http.ResponseWriter, r *http.Request) {
+	// Get tags from query parameter
+	tagsParam := r.URL.Query().Get("tags")
+	if tagsParam == "" {
+		http.Error(w, "tags parameter is required", http.StatusBadRequest)
+		return
+	}
+
+	// Split tags by comma and trim whitespace
+	tags := strings.Split(tagsParam, ",")
+	for i := range tags {
+		tags[i] = strings.TrimSpace(tags[i])
+	}
+
+	problems, err := h.repo.GetByTags(tags)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(problems)
 }

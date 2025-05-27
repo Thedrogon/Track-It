@@ -104,3 +104,47 @@ func (r *ProblemRepository) Delete(id int) error {
 	_, err := r.db.Exec(query, id)
 	return err
 }
+
+func (r *ProblemRepository) GetByTags(tags []string) ([]*models.Problem, error) {
+	query := `SELECT id, problem_id, title, tags FROM problems`
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var problems []*models.Problem
+	for rows.Next() {
+		problem := &models.Problem{}
+		var tagsJSON string
+		err := rows.Scan(&problem.ID, &problem.Problem_ID, &problem.Title, &tagsJSON)
+		if err != nil {
+			return nil, err
+		}
+
+		err = json.Unmarshal([]byte(tagsJSON), &problem.Tags)
+		if err != nil {
+			return nil, err
+		}
+
+		// Check if problem has any of the requested tags
+		hasTag := false
+		for _, tag := range tags {
+			for _, problemTag := range problem.Tags {
+				if tag == problemTag {
+					hasTag = true
+					break
+				}
+			}
+			if hasTag {
+				break
+			}
+		}
+
+		if hasTag {
+			problems = append(problems, problem)
+		}
+	}
+
+	return problems, nil
+}
