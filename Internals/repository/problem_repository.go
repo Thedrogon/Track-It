@@ -124,7 +124,7 @@ func (r *ProblemRepository) Delete(id int) error {
 }
 
 
-//-----------------------------GET 5 FUNCTION--------------------------
+//-----------------------------GET 5 FUNCTION----------------------------
 
 
 func (r *ProblemRepository) Get_five() ([]*models.Revise_Problem, error) { //Getting all and then calling revise_5 function
@@ -150,9 +150,9 @@ func (r *ProblemRepository) Get_five() ([]*models.Revise_Problem, error) { //Get
 		problems = append(problems, problem)
 	}
 
-	Myfiveproblems = algos.Revise_5(problems)
+	var Myfiveproblems = algos.Revise_5(problems)
 
-	return problems, nil
+	return Myfiveproblems, nil
 }
 
 
