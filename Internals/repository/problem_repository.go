@@ -7,6 +7,7 @@ import (
 
 	"github.com/Thedrogon/Track-It/Internals/db"
 	"github.com/Thedrogon/Track-It/Internals/models"
+	algos "github.com/Thedrogon/Track-It/Algorithms"
 )
 
 type ProblemRepository struct {
@@ -18,6 +19,9 @@ func NewProblemRepository() *ProblemRepository {
 		db: db.DB,
 	}
 }
+
+
+//-------------------------CREATE FUNCTION------------------------
 
 func (r *ProblemRepository) Create(problem *models.Problem) error {
 	tagsJSON, err := json.Marshal(problem.Tags)
@@ -39,6 +43,10 @@ func (r *ProblemRepository) Create(problem *models.Problem) error {
 	return nil
 }
 
+
+//------------------------------------GET BY ID FUNCTION----------------------
+
+
 func (r *ProblemRepository) GetByID(id int) (*models.Problem, error) {
 	problem := &models.Problem{}
 	var tagsJSON string
@@ -59,6 +67,10 @@ func (r *ProblemRepository) GetByID(id int) (*models.Problem, error) {
 
 	return problem, nil
 }
+
+
+//--------------------------GET ALL FUNCTION -------------------------
+
 
 func (r *ProblemRepository) GetAll() ([]*models.Problem, error) {
 	query := `SELECT id, problem_id, title, tags FROM problems`
@@ -88,6 +100,12 @@ func (r *ProblemRepository) GetAll() ([]*models.Problem, error) {
 	return problems, nil
 }
 
+
+
+//----------------------------------UPDATE AND DELETE ----------------------------
+
+
+
 func (r *ProblemRepository) Update(problem *models.Problem) error {
 	tagsJSON, err := json.Marshal(problem.Tags)
 	if err != nil {
@@ -104,6 +122,43 @@ func (r *ProblemRepository) Delete(id int) error {
 	_, err := r.db.Exec(query, id)
 	return err
 }
+
+
+//-----------------------------GET 5 FUNCTION--------------------------
+
+
+func (r *ProblemRepository) Get_five() ([]*models.Revise_Problem, error) { //Getting all and then calling revise_5 function
+	query := `SELECT id, problem_id FROM problems`
+
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var problems []*models.Revise_Problem
+	for rows.Next() {
+		problem := &models.Revise_Problem{}
+		
+		err := rows.Scan(&problem.ID, &problem.Problem_ID)
+		if err != nil {
+			return nil, err
+		}
+
+		
+
+		problems = append(problems, problem)
+	}
+
+	Myfiveproblems = algos.Revise_5(problems)
+
+	return problems, nil
+}
+
+
+//-------------------------------GET BY TAGS FUNCTION------------------------------
+
+
 
 func (r *ProblemRepository) GetByTags(tags []string) ([]*models.Problem, error) {
 	query := `SELECT id, problem_id, title, tags FROM problems`
