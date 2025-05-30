@@ -115,7 +115,9 @@ func (r *ProblemRepository) GetByTags(tags []string) ([]*models.Problem, error) 
 
 	var problems []*models.Problem
 	for rows.Next() {
-		problem := &models.Problem{}
+		problem := &models.Problem{
+			Tags: []string{},
+		}
 		var tagsJSON string
 		err := rows.Scan(&problem.ID, &problem.Problem_ID, &problem.Title, &tagsJSON)
 		if err != nil {
