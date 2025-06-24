@@ -3,8 +3,9 @@ module github.com/Thedrogon/Track-It
 go 1.24.2
 
 require (
+	github.com/Thedrogon/GophersCSV v0.0.0-20250620213419-7d735e28891f
 	github.com/gorilla/mux v1.8.1
-	github.com/mattn/go-sqlite3 v1.14.28
+	modernc.org/sqlite v1.37.1
 )
 
 require (
@@ -18,5 +19,4 @@ require (
 	modernc.org/libc v1.65.7 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
-	modernc.org/sqlite v1.37.1 // indirect
 )
